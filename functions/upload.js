@@ -15,8 +15,15 @@ export async function onRequestPost(context) {
         body: request.body,
     });
 
-    // 获取图片的URL
-    const imageUrl = 'https://imgs.980726.xyz' + url.pathname;
+    // 解析响应内容以获取实际的图片URL
+    const responseText = await response.text();
+    const imageUrlMatch = responseText.match(/https:\/\/imgs\.980726\.xyz\/[^"]+/);
+
+    if (!imageUrlMatch) {
+        return new Response("Image upload failed", { status: 500 });
+    }
+
+    const imageUrl = imageUrlMatch[0];
 
     // 生成Markdown链接
     const markdownLink = `![Image](${imageUrl})`;
