@@ -1,30 +1,19 @@
-export async function onRequestPost(context) {  
+export async function onRequestPost(context) {  // Contents of context object  
     const {   
-        request,
-        env,
-        params,
-        waitUntil,
-        next,
-        data,
-    } = context;
-    
-    const url = new URL(request.url);
-    const response = await fetch('https://telegra.ph' + url.pathname + url.search, {
-        method: request.method,
-        headers: request.headers,
-        body: request.body,
-    });
-
-    const responseText = await response.text();
-    const imageUrlMatch = responseText.match(/https:\/\/telegra\.ph\/file\/[^"]+/);
-
-    if (!imageUrlMatch) {
-        return new Response("Image upload failed", { status: 500 });
-    }
-
-    const imageUrl = imageUrlMatch[0];
-
-    const markdownLink = `![Image](${imageUrl})`;
-
-    return new Response(markdownLink, { status: 200, headers: { "Content-Type": "text/plain" } });
-}
+        request, // same as existing Worker API    
+    env, // same as existing Worker API    
+    params, // if filename includes [id] or [[path]]   
+     waitUntil, // same as ctx.waitUntil in existing Worker API    
+     next, // used for middleware or to fetch assets    
+     data, // arbitrary space for passing data between middlewares 
+     } = context;
+     context.request
+     const url = new URL(request.url);
+     const response = fetch('https://telegra.ph/' + url.pathname + url.search, {
+         method: request.method,
+         headers: request.headers,
+         body: request.body,
+     });
+    return response;
+  }
+  
