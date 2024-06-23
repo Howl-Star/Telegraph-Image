@@ -9,14 +9,14 @@ export async function onRequestPost(context) {
     } = context;
     
     const url = new URL(request.url);
-    const response = await fetch('https://telegra.ph/' + url.pathname + url.search, { 
+    const response = await fetch('https://telegra.ph/' + url.pathname + url.search, {
         method: request.method,
         headers: request.headers,
         body: request.body,
     });
 
     // 获取图片的URL
-    const imageUrl = await response.text();
+    const imageUrl = 'https://imgs.980726.xyz' + url.pathname;
 
     // 生成Markdown链接
     const markdownLink = `![Image](${imageUrl})`;
