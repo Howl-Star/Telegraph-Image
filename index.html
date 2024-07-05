@@ -4,14 +4,16 @@
   <script>
   // 等待整个文档加载完毕
 document.addEventListener('DOMContentLoaded', function() {
+    var lastInputValue = ''; // 用于存储上一次输入框的值
+    var timer; // 用于存储定时器的引用
+  
     // 等待输入框元素生成
     var waitForElement = setInterval(function() {
         var inputElement = document.getElementById('url-content');
         if (inputElement) {
             // 输入框元素已经准备好，执行你的代码
             var url = inputElement.value.trim(); // 获取输入框的值
-            if (url !== '') {
-              clearInterval(waitForElement); // 清除定时器
+            if (url !== lastInputValue) {
                 var altText = url.split('/').pop(); // 获取图片链接的最后一部分作为 Alt Text
                 var markdownImage = `![${altText}](${url})`;
                 console.log('生成的 Markdown 格式的图片链接：', markdownImage);
@@ -54,6 +56,20 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 console.error('输入框内容为空！');
             }
+
+            // 更新上一次输入框的值为当前值
+            lastInputValue = url;
+
+            // 如果定时器存在，则清除定时器
+            if (timer) {
+                clearTimeout(timer);
+            }
+
+            // 设置2分钟后关闭定时器
+            timer = setTimeout(function() {
+                clearInterval(waitForElement); // 停止等待输入框元素的检查
+                console.log('定时器已关闭');
+            }, 2 * 60 * 1000); // 2分钟，单位是毫秒
         }
     }, 1000); // 每1000毫秒检查一次是否生成了输入框元素
 });
